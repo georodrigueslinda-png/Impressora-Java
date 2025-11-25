@@ -116,8 +116,10 @@ public class Main {
             } else {
                 System.out.println("Erro ao imprimir. Código de erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi impresso");
+        }
+
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
     public static void ImpressaoQRCode() {
@@ -128,8 +130,9 @@ public class Main {
             } else {
                 System.out.println("Erro ao imprimir. Código de erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi impresso");
+        }
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
 
@@ -141,8 +144,9 @@ public class Main {
             } else {
                 System.out.println("Erro ao imprimir Código de barras erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi impresso");
+        }
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
 
@@ -154,8 +158,9 @@ public class Main {
             } else {
                 System.out.println("Erro ao avançar papel erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi avançado");
+        }
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
     public static void AbreGavetaElgin() {
@@ -166,8 +171,9 @@ public class Main {
             } else {
                 System.out.println("Erro ao avançar papel erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi avançado");
+        }
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
 
@@ -219,8 +225,9 @@ public class Main {
             } else {
                 System.out.println("Erro ao avançar papel erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi avançado");
+        }
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
 
@@ -233,8 +240,9 @@ public class Main {
             } else {
                 System.out.println("Erro ao avançar papel erro: " + retorno);
             }
-        } else {
-            System.out.println("Já foi avançado");
+        }
+        else {
+            System.out.println("Precisa abrir a conexão primeiro");
         }
     }
 
