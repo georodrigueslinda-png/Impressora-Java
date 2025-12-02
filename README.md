@@ -6,126 +6,100 @@ EXPLICAÇÃO COMPLETA E ORGANIZADA DO CÓDIGO
 //Matheus Novaes
 //Otavio Lima
 
-✅ 1. IMPORTAÇÕES (Imports)
+✅ PASSO A PASSO DO PROJETO — Impressora Java (Elgin / DLL)
+1️⃣ Abaixamos o código base do professor
 
-São as bibliotecas que o programa usa.
-Biblioteca JNA (acesso à DLL)
+Primeiro pegamos o código base que o professor disponibilizou.
+Esse código já tinha a estrutura inicial do programa, como:
+
+menu funcionando
+
+função para abrir/fechar conexão
+
+chamadas básicas da DLL
+
+organização do projeto em Java
+
+Ele serviu como ponto de partida para o nosso sistema.
+
+2️⃣ Baixamos a DLL e os parâmetros no site da Elgin
+
+Depois fomos no site oficial da Elgin (área de desenvolvedores) e baixamos:
+
+E1_Impressora01.dll
+
+documentação das funções
+
+exemplos da Elgin
+
+tabela de parâmetros (modelo, tipo de conexão, porta, etc.)
+
+Esses parâmetros foram usados no nosso código.
+
+3️⃣ Configuramos o Java para usar a DLL
+
+No código, adicionamos as bibliotecas JNA, que permitem que o Java se comunique com DLLs:
+
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-Permitem que o Java chame funções que estão dentro da DLL da impressora.
-Entrada de dados
-import java.util.Scanner;
-Usado para ler o que o usuário digita no menu.
-
-Arquivos
-import javax.swing.JFileChooser;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.io.FileInputStream;
 
 
-Usadas para ler arquivos XML (embora apenas um método realmente use isso).
+Isso é necessário porque o Java sozinho não sabe chamar funções externas.
 
-✅ 2. INTERFACE DA DLL (ImpressoraDLL)
+4️⃣ Criamos a Interface da DLL
+
+Depois criamos a interface:
+
 public interface ImpressoraDLL extends Library
 
-Define uma “ponte” entre Java e a DLL.
 
-Carrega a DLL
+Essa interface funciona como uma ponte entre Java e a DLL da Elgin.
+
+Dentro dela colocamos todas as funções que existem na DLL, por exemplo:
+
+AbrirConexaoImpressora
+
+FecharConexaoImpressora
+
+ImprimirTexto
+
+ImprimirQRCode
+
+Corte
+
+AbreGaveta
+
+ImprimeXMLSAT
+
+5️⃣ Carregamos a DLL no Java
+
+Configuramos o caminho:
+
 ImpressoraDLL INSTANCE = (ImpressoraDLL) Native.load(
-        "C:\\caminho\\E1_Impressora01.dll",
-        ImpressoraDLL.class
+    "C:\\caminho\\E1_Impressora01.dll",
+    ImpressoraDLL.class
 );
 
-Isso faz o Java “abrir” a DLL e permitir chamar suas funções.
-Funções da DLL
-A interface declara todas as funções que existem dentro da DLL:
-Abrir conexão
-Fechar conexão
-Imprimir texto
-Imprimir código de barras
-Imprimir QR Code
-Cortar pape
-Abrir gaveta
-Fazer bip (sinal sonoro)
-Imprimir XML do SAT
-Imprimir XML de cancelamento
-Cada método retorna int:
-0 = sucesso
-outro número = erro
 
-✅ 3. VARIÁVEIS DO PROGRAMA
-private static boolean conexaoAberta = false;
-private static int tipo;
-private static String modelo;
-private static String conexao;
-private static int parametro;
-Servem para guardar:
-tipo de conexão
-modelo da impressor
-porta COM/USB
-parâmetro da DLL
-estado da conexão (aberta ou não)
-Scanner para ler entradas:
-private static final Scanner scanner = new Scanner(System.in);
+Isso permite que o Java “abra” a DLL e execute suas funções.
 
-✅ 4. capturarEntrada()
+6️⃣ Configuramos as variáveis da conexão
 
-Função básica para ler e retornar texto digitado pelo usuário.
+Criamos variáveis globais para armazenar:
 
-✅ 5. configurarConexao()
-Pede ao usuário:
-Tipo da conexão (USB/Serial/etc.)
-Modelo da impressora
-Porta (COM3, USB, etc.)
-Parâmetro extra
-Guarda tudo nas variáveis do programa.
-Se a conexão já estiver aberta, ela não deixa reconfigurar.
+tipo da conexão
 
-✅ 6. abrirConexao()
-Chama a função da DLL:
-AbreConexaoImpressora(tipo, modelo, conexao, parametro)
-Se retornar 0 → conexão aberta
-Senão → mostra código de erro
-Também ativa:
-conexaoAberta = true;
+modelo da impressora
 
-✅ 7. fecharConexao()
- 
-verificar se a conexão está aberta
-chamar FechaConexaoImpressora()
-conferir retorno
-fechar e alterar conexaoAberta para false
+porta (ex: COM3, USB)
 
-✅ 8. FUNÇÕES DE IMPRESSÃO
+parâmetro numérico
 
-Cada função verifica se a conexão está aberta.
-Se não estiver, mostra aviso.
-ImpressaoTexto()
-Imprime "Teste de impressao".
-ImpressaoQRCode()
-Imprime um QR Code.
-ImpressaoCodigoBarras()
-Imprime código de barras tipo 8.
-AvancaPapel()
-Avança 2 linhas.
-AbreGavetaElgin() / AbreGaveta()
-Comandos para abrir a gaveta da impressora.
-SinalSonoro()
-Faz a impressora emitir beeps.
+estado da conexão (aberta/fechada)
 
-✅ 9. IMPRESSÃO DE XML DO SAT
+7️⃣ Criamos o Menu Principal
 
-Usa dois arquivos:
-XML normal
-ImprimeXMLSAT("path=C:\\...\\XMLSAT.xml", 0)
-XML de cancelamento
-Mesmo esquema, mas com uma assinatura QRCode extra.
-
-✅ 10. MENU PRINCIPAL (main)
-
-O main cria um loop com um menu:
+O menu permite o usuário escolher o que deseja fazer:
 
 1 - Configurar Conexão
 2 - Abrir Conexão
@@ -133,25 +107,48 @@ O main cria um loop com um menu:
 4 - Imprimir QR Code
 5 - Código de Barras
 6 - XML SAT
-7 - XML Cancelamento SAT
+7 - XML Cancelamento
 8 - Abrir Gaveta Elgin
 9 - Abrir Gaveta
 10 - Sinal Sonoro
-0 - Fechar Conexão e Sair
+0 - Fechar e Sair
 
 
-Cada opção chama a função correspondente.
-Após impressões, chama:
-Corte(3)
-para cortar o papel.
-Quando o usuário digita 0:
-chama fecharConexao()
-encerra o loop
-fecha o scanner
+Cada opção chama uma função da DLL.
 
-✅ 11. lerArquivoComoString()
+8️⃣ Implementamos as Funções de Impressão
 
-Lê um arquivo e retorna seu conteúdo como uma String.
-Serve para abrir archivos XML, TXT, etc.
+Cada função primeiro verifica se a conexão está aberta.
+Depois chama a função correspondente da DLL:
 
-(No seu código atual, está lá mas não está sendo usado.)
+imprimir texto
+
+imprimir QR Code
+
+imprimir código de barras
+
+abrir gaveta
+
+sinal sonoro
+
+imprimir XML SAT
+
+cortar papel
+
+9️⃣ Testamos tudo na impressora
+
+Após ajustar todas as funções e caminhos, testamos:
+
+abrir conexão
+
+imprimir texto
+
+QR Code
+
+XML SAT
+
+abrir gaveta
+
+corte
+
+e no final fechar a conexão
